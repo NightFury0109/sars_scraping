@@ -1,8 +1,20 @@
-const browserObject = require('./browser');
-const scraperController = require('./pageController');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors')
+const app = express();
 
-//Start the browser and create a browser instance
-let browserInstance = browserObject.startBrowser();
+const getStatus = require('./apis/getStatus');
 
-// Pass the browser instance to the scraper controller
-scraperController(browserInstance)
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.use(cors({
+    origin: "*",
+    methods: ["*"]
+}));
+
+app.use('/api/getStatus', getStatus);
+
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => console.log(`Server running on port ${port}`));
